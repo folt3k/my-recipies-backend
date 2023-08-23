@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { UsersModule } from './modules/user/user.module';
 import { SeedService } from './seed/seed.service';
+import { AuthModule } from './modules/auth/auth.module';
 import 'dotenv/config';
 
 @Module({
@@ -22,6 +23,7 @@ import 'dotenv/config';
       synchronize: process.env.NODE_ENV === 'development',
     }),
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [SeedService],
