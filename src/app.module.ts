@@ -2,10 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UsersModule } from './modules/user/user.module';
-import 'dotenv/config';
 import { SeedService } from './seed/seed.service';
+import 'dotenv/config';
 
 @Module({
   imports: [
@@ -25,6 +24,6 @@ import { SeedService } from './seed/seed.service';
     UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService, SeedService],
+  providers: [SeedService],
 })
 export class AppModule {}
