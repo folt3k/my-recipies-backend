@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
-import { UsersModule } from './modules/user/user.module';
+import { UsersModule } from './features/user/user.module';
 import { SeedService } from './seed/seed.service';
-import { AuthModule } from './modules/auth/auth.module';
+import { AuthModule } from './features/auth/auth.module';
 import 'dotenv/config';
 
 @Module({
