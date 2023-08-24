@@ -10,14 +10,11 @@ export class UserService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
-  async getHello(): Promise<string> {
-    await this.usersRepository.save({ login: 'folt3k', password: 'test' });
-
-    return 'Hello World!';
-  }
 
   async createUser(dto: CreateUserDto): Promise<User> {
-    return await this.usersRepository.save(dto);
+    const user = this.usersRepository.create(dto);
+
+    return await this.usersRepository.save(user);
   }
 
   async findUserByLogin(login: string): Promise<User | null> {
