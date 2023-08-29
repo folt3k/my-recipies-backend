@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -5,7 +6,7 @@ import { AppController } from './app.controller';
 import { UsersModule } from './features/user/user.module';
 import { SeedService } from './seed/seed.service';
 import { AuthModule } from './features/auth/auth.module';
-import 'dotenv/config';
+import { RecipeModule } from './features/recipe/recipe.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import 'dotenv/config';
     }),
     UsersModule,
     AuthModule,
+    RecipeModule,
   ],
   controllers: [AppController],
   providers: [SeedService],
