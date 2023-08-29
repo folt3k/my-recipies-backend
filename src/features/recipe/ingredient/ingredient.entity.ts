@@ -9,7 +9,7 @@ export class RecipeIngredientCategory {
   @Column('varchar', { length: 256 })
   name: string;
 
-  @OneToMany(() => RecipeIngredient, (ingredient) => ingredient.category)
+  @OneToMany(() => RecipeIngredient, (ingredient) => ingredient.category, { cascade: true, eager: true })
   ingredients: RecipeIngredient[];
 
   @ManyToOne(() => Recipe, (recipe) => recipe.ingredientCategories)

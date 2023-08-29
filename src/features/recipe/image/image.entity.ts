@@ -12,6 +12,6 @@ export class RecipeImage {
   @Column('varchar', { length: 5 })
   extension: string;
 
-  @ManyToOne(() => Recipe, (recipe) => recipe.images)
-  recipe: Recipe;
+  @ManyToOne(() => Recipe, (recipe) => recipe.images, { nullable: true })
+  recipe?: Recipe;
 }

@@ -26,9 +26,12 @@ export class Recipe {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => RecipeIngredientCategory, (ingredientCategory) => ingredientCategory.recipe)
+  @OneToMany(() => RecipeIngredientCategory, (ingredientCategory) => ingredientCategory.recipe, {
+    cascade: true,
+    eager: true,
+  })
   ingredientCategories: RecipeIngredientCategory[];
 
-  @OneToMany(() => RecipeImage, (image) => image.recipe)
+  @OneToMany(() => RecipeImage, (image) => image.recipe, { eager: true })
   images: RecipeImage[];
 }
