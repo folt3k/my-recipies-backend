@@ -21,13 +21,14 @@ services:
     ports:
       - 3001:3000
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - PORT=3000
       - DB_HOST=MyRecipesPostgres
       - DB_PORT=5432
       - DB_USERNAME=postgres
       - DB_PASSWORD=password
       - DB_NAME=my-recipes
+      - AUTH_JWT_SECRET_KEY=secret123
     depends_on:
       postgres:
         condition: service_healthy
