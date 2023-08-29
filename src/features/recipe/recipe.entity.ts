@@ -27,7 +27,7 @@ export class Recipe {
   updatedAt: Date;
 
   @OneToMany(() => RecipeIngredientCategory, (ingredientCategory) => ingredientCategory.recipe)
-  ingredients: RecipeIngredientCategory[];
+  ingredientCategories: RecipeIngredientCategory[];
 
   @OneToMany(() => RecipeImage, (image) => image.recipe)
   images: RecipeImage[];

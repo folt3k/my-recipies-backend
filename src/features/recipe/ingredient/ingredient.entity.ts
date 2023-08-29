@@ -12,7 +12,7 @@ export class RecipeIngredientCategory {
   @OneToMany(() => RecipeIngredient, (ingredient) => ingredient.category)
   ingredients: RecipeIngredient[];
 
-  @ManyToOne(() => Recipe, (recipe) => recipe.ingredients)
+  @ManyToOne(() => Recipe, (recipe) => recipe.ingredientCategories)
   recipe: Recipe;
 }
 
