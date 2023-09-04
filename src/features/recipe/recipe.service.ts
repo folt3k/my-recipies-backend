@@ -13,7 +13,7 @@ export class RecipeService {
       name: dto.name,
       content: dto.content,
       images: dto.images,
-      ingredientCategories: dto.ingredientCategories,
+      ingredients: dto.ingredients,
     });
 
     const savedRecipe = await this.recipeRepository.save(newRecipe);

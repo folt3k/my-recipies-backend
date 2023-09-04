@@ -1,8 +1,8 @@
-import { CreateIngredientCategoryDto } from './ingredient/ingredient.dto';
+import { RecipeIngredientsGroup, RecipeIngredient } from './ingredient/ingredient.types';
 
 export interface CreateRecipeDto {
   name: string;
   content: string;
   images: Array<{ id: string }>;
-  ingredientCategories: CreateIngredientCategoryDto[];
+  ingredients: RecipeIngredientsGroup[] | RecipeIngredient[];
 }

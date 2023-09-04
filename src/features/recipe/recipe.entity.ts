@@ -6,8 +6,8 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { RecipeIngredientCategory } from './ingredient/ingredient.entity';
 import { RecipeImage } from './image/image.entity';
+import { RecipeIngredientsGroup, RecipeIngredient } from './ingredient/ingredient.types';
 
 @Entity()
 export class Recipe {
@@ -20,17 +20,14 @@ export class Recipe {
   @Column('text')
   content: string;
 
+  @Column('json')
+  ingredients: RecipeIngredientsGroup[] | RecipeIngredient[];
+
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @OneToMany(() => RecipeIngredientCategory, (ingredientCategory) => ingredientCategory.recipe, {
-    cascade: true,
-    eager: true,
-  })
-  ingredientCategories: RecipeIngredientCategory[];
 
   @OneToMany(() => RecipeImage, (image) => image.recipe, { eager: true })
   images: RecipeImage[];
