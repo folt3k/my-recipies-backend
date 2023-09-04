@@ -22,4 +22,24 @@ export class RecipeService {
       where: { id: savedRecipe.id },
     });
   }
+
+  async getAll(
+    params: {
+      page?: string;
+      perPage?: string;
+    } = {},
+  ): Promise<{ page: number; perPage: number; total: number; items: Recipe[] }> {
+    const page = params.page ? +params.page : 1;
+    const perPage = params.perPage ? +params.perPage : 10;
+
+    const items = await this.recipeRepository.find({
+      order: { createdAt: 'desc' },
+      skip: (page - 1) * perPage,
+      take: perPage,
+    });
+
+    const total = await this.recipeRepository.count();
+
+    return { page, perPage, total, items: items };
+  }
 }

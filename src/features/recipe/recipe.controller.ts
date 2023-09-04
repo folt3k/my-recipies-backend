@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CreateRecipeDto } from './recipe.dto';
 import { RecipeService } from './recipe.service';
 
@@ -6,8 +6,13 @@ import { RecipeService } from './recipe.service';
 export class RecipeController {
   constructor(private recipeService: RecipeService) {}
 
-  @Post('')
+  @Post()
   async create(@Body() body: CreateRecipeDto) {
     return this.recipeService.create(body);
+  }
+
+  @Get()
+  async getAll(@Query() params: { page?: string; perPage?: string }) {
+    return this.recipeService.getAll(params);
   }
 }
