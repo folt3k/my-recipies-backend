@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRecipeDto } from './recipe.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Recipe } from './recipe.entity';
@@ -52,5 +52,13 @@ export class RecipeService {
     const total = await this.recipeRepository.count();
 
     return { page, perPage, total, items: items };
+  }
+
+  async getOne(id: string): Promise<Recipe> {
+    try {
+      return await this.dataSource.manager.findOneOrFail(Recipe, { where: { id } });
+    } catch (e) {
+      throw new NotFoundException();
+    }
   }
 }

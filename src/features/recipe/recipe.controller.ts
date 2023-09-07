@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CreateRecipeDto } from './recipe.dto';
 import { RecipeService } from './recipe.service';
-import { ApiBearerAuth, ApiTags, ApiBody, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiBody, ApiQuery, ApiParam } from '@nestjs/swagger';
 import { createRecipeExampleData } from './recipe.swagger';
 
 @ApiBearerAuth()
@@ -17,6 +17,12 @@ export class RecipeController {
   })
   async create(@Body() body: CreateRecipeDto) {
     return this.recipeService.create(body);
+  }
+
+  @Get(':id')
+  @ApiParam({ name: 'id', type: 'string', required: true })
+  async getOne(@Param() params: { id: string }) {
+    return this.recipeService.getOne(params.id);
   }
 
   @Get()
