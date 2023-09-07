@@ -35,7 +35,14 @@ export const createRecipeExampleData: SwaggerExampleData<CreateRecipeDto> = {
           ],
         },
       ],
-      tags: [],
+      tags: [
+        {
+          name: 'ciasta',
+        },
+        {
+          name: 'czekolada',
+        },
+      ],
     },
   },
   withoutCategories: {
@@ -55,7 +62,14 @@ export const createRecipeExampleData: SwaggerExampleData<CreateRecipeDto> = {
           name: '20dag kakao',
         },
       ],
-      tags: [],
+      tags: [
+        {
+          name: 'ciasta',
+        },
+        {
+          name: 'czekolada',
+        },
+      ],
     },
   },
 };
