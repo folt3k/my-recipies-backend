@@ -9,7 +9,7 @@ export class CreateRecipeDto {
   content: string;
 
   @ApiProperty()
-  images: Array<{ id: string }>;
+  images: Array<{ url: string }>;
 
   @ApiProperty()
   ingredients: RecipeIngredientsGroup[] | RecipeIngredient[];

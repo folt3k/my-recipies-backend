@@ -8,7 +8,7 @@ export const createRecipeExampleData: SwaggerExampleData<CreateRecipeDto> = {
       content: 'To jest przykładowy przepis na wuzetkę.',
       images: [
         {
-          id: '0f1021a5-38b0-4629-8c84-ed45cbcc78d3',
+          url: 'http://localhost:3000/adres_do_obrazka.png',
         },
       ],
       ingredients: [
@@ -51,7 +51,7 @@ export const createRecipeExampleData: SwaggerExampleData<CreateRecipeDto> = {
       content: 'To jest przykładowy przepis na wuzetkę.',
       images: [
         {
-          id: '0f1021a5-38b0-4629-8c84-ed45cbcc78d3',
+          url: 'http://localhost:3000/adres_do_obrazka.png',
         },
       ],
       ingredients: [

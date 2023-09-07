@@ -7,10 +7,7 @@ export class RecipeImage {
   id: string;
 
   @Column('varchar', { length: 1024 })
-  name: string;
-
-  @Column('varchar', { length: 5 })
-  extension: string;
+  url: string;
 
   @ManyToOne(() => Recipe, (recipe) => recipe.images, { nullable: true })
   recipe?: Recipe;

@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Recipe } from './recipe.entity';
 import { DataSource, Repository } from 'typeorm';
 import { RecipeTagService } from './tag/tag.service';
+import { RecipeImageService } from './image/image.service';
 
 @Injectable()
 export class RecipeService {
@@ -11,17 +12,19 @@ export class RecipeService {
     @InjectRepository(Recipe) private recipeRepository: Repository<Recipe>,
     private dataSource: DataSource,
     private tagService: RecipeTagService,
+    private imageService: RecipeImageService,
   ) {}
 
   async create(dto: CreateRecipeDto): Promise<Recipe> {
     return this.dataSource.transaction(async (manager) => {
       const savedTags = await this.tagService.saveAll(dto.tags);
+      const savedImages = await this.imageService.saveAll(dto.images);
 
       const newRecipe = manager.create(Recipe, {
         name: dto.name,
         content: dto.content,
-        images: dto.images,
         ingredients: dto.ingredients,
+        images: savedImages,
         tags: savedTags,
       });
 
