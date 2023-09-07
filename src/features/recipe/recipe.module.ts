@@ -4,10 +4,12 @@ import { Recipe } from './recipe.entity';
 import { RecipeImage } from './image/image.entity';
 import { RecipeController } from './recipe.controller';
 import { RecipeService } from './recipe.service';
+import { RecipeTag } from './tag/tag.entity';
+import { RecipeTagService } from './tag/tag.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Recipe, RecipeImage])],
+  imports: [TypeOrmModule.forFeature([Recipe, RecipeImage, RecipeTag])],
   controllers: [RecipeController],
-  providers: [RecipeService],
+  providers: [RecipeService, RecipeTagService],
 })
 export class RecipeModule {}

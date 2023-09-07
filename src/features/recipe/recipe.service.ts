@@ -2,24 +2,32 @@ import { Injectable } from '@nestjs/common';
 import { CreateRecipeDto } from './recipe.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Recipe } from './recipe.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
+import { RecipeTagService } from './tag/tag.service';
 
 @Injectable()
 export class RecipeService {
-  constructor(@InjectRepository(Recipe) private recipeRepository: Repository<Recipe>) {}
+  constructor(
+    @InjectRepository(Recipe) private recipeRepository: Repository<Recipe>,
+    private dataSource: DataSource,
+    private tagService: RecipeTagService,
+  ) {}
 
   async create(dto: CreateRecipeDto): Promise<Recipe> {
-    const newRecipe = this.recipeRepository.create({
-      name: dto.name,
-      content: dto.content,
-      images: dto.images,
-      ingredients: dto.ingredients,
-    });
+    return this.dataSource.transaction(async (manager) => {
+      const savedTags = await this.tagService.saveAll(dto.tags);
 
-    const savedRecipe = await this.recipeRepository.save(newRecipe);
+      const newRecipe = manager.create(Recipe, {
+        name: dto.name,
+        content: dto.content,
+        images: dto.images,
+        ingredients: dto.ingredients,
+        tags: savedTags,
+      });
 
-    return this.recipeRepository.findOne({
-      where: { id: savedRecipe.id },
+      const saveRecipe = await manager.save(newRecipe);
+
+      return await manager.findOne(Recipe, { where: { id: saveRecipe.id } });
     });
   }
 

@@ -13,4 +13,7 @@ export class CreateRecipeDto {
 
   @ApiProperty()
   ingredients: RecipeIngredientsGroup[] | RecipeIngredient[];
+
+  @ApiProperty()
+  tags: Array<{ name: string }>;
 }
