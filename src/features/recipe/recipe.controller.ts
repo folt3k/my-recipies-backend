@@ -3,6 +3,7 @@ import { CreateRecipeDto } from './recipe.dto';
 import { RecipeService } from './recipe.service';
 import { ApiBearerAuth, ApiTags, ApiBody, ApiQuery, ApiParam } from '@nestjs/swagger';
 import { createRecipeExampleData } from './recipe.swagger';
+import { GetAllRecipesQueryParams } from './recipe.types';
 
 @ApiBearerAuth()
 @ApiTags('recipes')
@@ -28,7 +29,7 @@ export class RecipeController {
   @Get()
   @ApiQuery({ name: 'page', type: 'number', required: false })
   @ApiQuery({ name: 'perPage', type: 'number', required: false })
-  async getAll(@Query() params: { page?: string; perPage?: string }) {
+  async getAll(@Query() params: GetAllRecipesQueryParams) {
     return this.recipeService.getAll(params);
   }
 }
