@@ -49,7 +49,8 @@ export class RecipeService {
       .innerJoinAndSelect('recipe.images', 'images');
 
     if (params.q) {
-      query.where('LOWER(recipe.name) LIKE LOWER (:name)', { name: `%${params.q}%` });
+      query.where('recipe.name ILIKE (:q)', { q: `%${params.q}%` });
+      query.orWhere('recipe.content ILIKE (:q)', { q: `%${params.q}%` });
     }
 
     if (params.tags) {
@@ -64,8 +65,7 @@ export class RecipeService {
       .skip((page - 1) * perPage)
       .take(perPage);
 
-    const items = await query.getMany();
-    const total = await query.getCount();
+    const [items, total] = await query.getManyAndCount();
 
     return { page, perPage, total, items: items };
   }
