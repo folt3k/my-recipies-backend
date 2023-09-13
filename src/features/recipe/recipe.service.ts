@@ -56,18 +56,22 @@ export class RecipeService {
     if (params.tags) {
       const tags = Array.isArray(params.tags) ? params.tags : [params.tags];
 
-      query.innerJoin('recipe.tags', 'inner_tags');
-      query.andWhere('inner_tags.name IN (:...tags)', { tags });
+      const sb = this.tagRepository
+        .createQueryBuilder('it')
+        .select('rt.recipeId')
+        .innerJoin('recipe_tags_recipe_tag', 'rt', 'it.id = rt.recipeTagId')
+        .where(`rt.recipeId = recipe.id AND it.name IN (:...tags)`);
+
+      query.andWhere(`recipe.id IN (${sb.getQuery()})`).setParameter('tags', tags);
     }
 
     query
       .orderBy('recipe.createdAt', 'DESC')
       .skip((page - 1) * perPage)
       .take(perPage);
-
     const [items, total] = await query.getManyAndCount();
 
-    return { page, perPage, total, items: items };
+    return { page, perPage, total, items };
   }
 
   async getOne(id: string): Promise<Recipe> {
