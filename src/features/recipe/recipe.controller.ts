@@ -29,6 +29,8 @@ export class RecipeController {
   @Get()
   @ApiQuery({ name: 'page', type: 'number', required: false })
   @ApiQuery({ name: 'perPage', type: 'number', required: false })
+  @ApiQuery({ name: 'tags', type: 'array', required: false })
+  @ApiQuery({ name: 'q', type: 'string', required: false })
   async getAll(@Query() params: GetAllRecipesQueryParams) {
     return this.recipeService.getAll(params);
   }
