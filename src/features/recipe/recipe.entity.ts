@@ -20,6 +20,9 @@ export class Recipe {
   @Column('varchar', { length: 200 })
   name: string;
 
+  @Column('varchar', { length: 1024 })
+  description: string;
+
   @Column('text')
   content: string;
 

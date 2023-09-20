@@ -5,6 +5,7 @@ export const createRecipeExampleData: SwaggerExampleData<CreateRecipeDto> = {
   withCategories: {
     value: {
       name: 'Pyszna beza',
+      description: 'Wspaniała wuzetka prosto z Warszawy',
       content: 'To jest przykładowy przepis na wuzetkę.',
       images: [
         {
@@ -48,6 +49,7 @@ export const createRecipeExampleData: SwaggerExampleData<CreateRecipeDto> = {
   withoutCategories: {
     value: {
       name: 'Pyszna beza',
+      description: 'Wspaniała wuzetka prosto z Warszawy',
       content: 'To jest przykładowy przepis na wuzetkę.',
       images: [
         {

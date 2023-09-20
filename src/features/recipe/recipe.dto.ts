@@ -6,6 +6,9 @@ export class CreateRecipeDto {
   name: string;
 
   @ApiProperty()
+  description: string;
+
+  @ApiProperty()
   content: string;
 
   @ApiProperty()

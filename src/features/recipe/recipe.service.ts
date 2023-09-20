@@ -25,6 +25,7 @@ export class RecipeService {
 
       const newRecipe = manager.create(Recipe, {
         name: dto.name,
+        description: dto.description,
         content: dto.content,
         ingredients: dto.ingredients,
         images: savedImages,
