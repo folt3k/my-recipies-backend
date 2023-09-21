@@ -1,7 +1,7 @@
-import { CreateRecipeDto } from './recipe.dto';
+import { UpsertRecipeDto } from './recipe.dto';
 import { SwaggerExampleData } from '../../shared/types/swagger.types';
 
-export const createRecipeExampleData: SwaggerExampleData<CreateRecipeDto> = {
+export const upsertRecipeExampleData: SwaggerExampleData<UpsertRecipeDto> = {
   withCategories: {
     value: {
       name: 'Pyszna beza',

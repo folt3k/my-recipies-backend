@@ -1,5 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateRecipeDto } from './recipe.dto';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { UpsertRecipeDto } from './recipe.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Recipe } from './recipe.entity';
 import { DataSource, Repository } from 'typeorm';
@@ -18,7 +18,7 @@ export class RecipeService {
     private imageService: RecipeImageService,
   ) {}
 
-  async create(dto: CreateRecipeDto): Promise<Recipe> {
+  async create(dto: UpsertRecipeDto): Promise<Recipe> {
     return this.dataSource.transaction(async (manager) => {
       const savedTags = await this.tagService.saveAll(dto.tags);
       const savedImages = await this.imageService.saveAll(dto.images);
@@ -35,6 +35,33 @@ export class RecipeService {
       const saveRecipe = await manager.save(newRecipe);
 
       return await manager.findOne(Recipe, { where: { id: saveRecipe.id } });
+    });
+  }
+
+  async update(id: string, dto: UpsertRecipeDto): Promise<Recipe> {
+    return this.dataSource.transaction(async (manager) => {
+      try {
+        await manager.findOneOrFail(Recipe, { where: { id } });
+      } catch (e) {
+        throw new HttpException('Taki przepis nie istnieje.', 404);
+      }
+
+      const savedTags = await this.tagService.saveAll(dto.tags);
+      const savedImages = await this.imageService.saveAll(dto.images, id);
+
+      const prelaodedRecipe = await manager.preload(Recipe, {
+        id: id,
+        name: dto.name,
+        description: dto.description,
+        content: dto.content,
+        ingredients: dto.ingredients,
+        images: savedImages,
+        tags: savedTags,
+      });
+
+      const updatedRecipe = await manager.save(prelaodedRecipe);
+
+      return await manager.findOne(Recipe, { where: { id: updatedRecipe.id } });
     });
   }
 

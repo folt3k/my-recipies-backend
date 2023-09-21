@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { CreateRecipeDto } from './recipe.dto';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { UpsertRecipeDto } from './recipe.dto';
 import { RecipeService } from './recipe.service';
 import { ApiBearerAuth, ApiTags, ApiBody, ApiQuery, ApiParam } from '@nestjs/swagger';
-import { createRecipeExampleData } from './recipe.swagger';
+import { upsertRecipeExampleData } from './recipe.swagger';
 import { GetAllRecipesQueryParams } from './recipe.types';
 
 @ApiBearerAuth()
@@ -13,11 +13,20 @@ export class RecipeController {
 
   @Post()
   @ApiBody({
-    type: CreateRecipeDto,
-    examples: createRecipeExampleData,
+    type: UpsertRecipeDto,
+    examples: upsertRecipeExampleData,
   })
-  async create(@Body() body: CreateRecipeDto) {
+  async create(@Body() body: UpsertRecipeDto) {
     return this.recipeService.create(body);
+  }
+
+  @Put(':id')
+  @ApiBody({
+    type: UpsertRecipeDto,
+    examples: upsertRecipeExampleData,
+  })
+  async update(@Param() params: { id: string }, @Body() body: UpsertRecipeDto) {
+    return this.recipeService.update(params.id, body);
   }
 
   @Get(':id')
