@@ -6,8 +6,8 @@ export class RecipeImage {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('varchar', { length: 1024 })
-  url: string;
+  @Column('text')
+  base64: string;
 
   @ManyToOne(() => Recipe, (recipe) => recipe.images, { nullable: true })
   recipe?: Recipe;
