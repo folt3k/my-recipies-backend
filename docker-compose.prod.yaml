@@ -1,0 +1,36 @@
+version: "3"
+services:
+  postgres:
+    container_name: MyRecipesPostgres
+    image: postgres:15.4
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=my-recipes
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+  app:
+    container_name: MyRecipesBackendApp
+    build: .
+    ports:
+      - 3001:3000
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_HOST=MyRecipesPostgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=my-recipes
+      - AUTH_JWT_SECRET_KEY=${AUTH_JWT_SECRET_KEY}
+    depends_on:
+      postgres:
+        condition: service_healthy
+volumes:
+  pgdata:
