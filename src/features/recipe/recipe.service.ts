@@ -7,6 +7,7 @@ import { RecipeTagService } from './tag/tag.service';
 import { RecipeImageService } from './image/image.service';
 import { GetAllRecipesQueryParams } from './recipe.types';
 import { RecipeTag } from './tag/tag.entity';
+import { hasIngredientCategories } from './recipe.utils';
 
 @Injectable()
 export class RecipeService {
@@ -28,6 +29,7 @@ export class RecipeService {
         description: dto.description,
         content: dto.content,
         ingredients: dto.ingredients,
+        hasIngredientCategories: hasIngredientCategories(dto.ingredients),
         images: savedImages,
         tags: savedTags,
       });
@@ -74,7 +76,7 @@ export class RecipeService {
     const query = this.recipeRepository
       .createQueryBuilder('recipe')
       .leftJoinAndSelect('recipe.tags', 'tags')
-      .innerJoinAndSelect('recipe.images', 'images');
+      .leftJoinAndSelect('recipe.images', 'images');
 
     if (params.q) {
       query.where('recipe.name ILIKE (:q)', { q: `%${params.q}%` });
@@ -97,6 +99,7 @@ export class RecipeService {
       .orderBy('recipe.createdAt', 'DESC')
       .skip((page - 1) * perPage)
       .take(perPage);
+
     const [items, total] = await query.getManyAndCount();
 
     return { page, perPage, total, items };

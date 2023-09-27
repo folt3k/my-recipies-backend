@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import { CreateRecipeImageDto } from './image.dto';
 import { RecipeImage } from './image.entity';
 import { HttpService } from '@nestjs/axios';
-import { map } from 'rxjs';
+import { catchError, map, of } from 'rxjs';
 
 @Injectable()
 export class RecipeImageService {
@@ -26,16 +26,24 @@ export class RecipeImageService {
             responseType: 'arraybuffer',
           })
           .pipe(
+            catchError(() => of(null)),
             map((downloadImage) => {
-              const base64 = Buffer.from(downloadImage.data).toString('base64');
-              const imgBase64 = `data:${downloadImage.headers['content-type']}';base64,${base64}`;
+              if (downloadImage) {
+                const base64 = Buffer.from(downloadImage.data).toString('base64');
+                const imgBase64 = `data:${downloadImage.headers['content-type']}';base64,${base64}`;
 
-              return this.dataSource.manager.create<RecipeImage>(RecipeImage, { base64: imgBase64 });
+                return this.dataSource.manager.create<RecipeImage>(RecipeImage, { base64: imgBase64 });
+              }
+
+              return null;
             }),
           )
           .toPromise();
       }),
     );
-    return await this.dataSource.manager.save(newImages);
+
+    const newImagesToSave = newImages.filter((img) => img);
+
+    return await this.dataSource.manager.save(newImagesToSave);
   }
 }

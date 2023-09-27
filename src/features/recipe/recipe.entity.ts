@@ -20,7 +20,7 @@ export class Recipe {
   @Column('varchar', { length: 200 })
   name: string;
 
-  @Column('varchar', { length: 1024 })
+  @Column('varchar', { length: 1024, nullable: true })
   description: string;
 
   @Column('text')
@@ -28,6 +28,9 @@ export class Recipe {
 
   @Column('json')
   ingredients: RecipeIngredientsGroup[] | RecipeIngredient[];
+
+  @Column('boolean')
+  hasIngredientCategories: boolean;
 
   @CreateDateColumn()
   createdAt: Date;
