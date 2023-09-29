@@ -4,6 +4,12 @@ import { CreateRecipeImageDto } from './image.dto';
 import { RecipeImage } from './image.entity';
 import { HttpService } from '@nestjs/axios';
 import { catchError, map, of } from 'rxjs';
+import * as fs from 'fs';
+import * as mkdirp from 'mkdirp';
+import { join, dirname, extname } from 'path';
+
+const appDir = dirname(require.main.filename);
+const imagesDir = join(appDir, '..', 'public', 'images');
 
 @Injectable()
 export class RecipeImageService {
@@ -27,12 +33,22 @@ export class RecipeImageService {
           })
           .pipe(
             catchError(() => of(null)),
-            map((downloadImage) => {
+            map(async (downloadImage) => {
               if (downloadImage) {
-                const base64 = Buffer.from(downloadImage.data).toString('base64');
-                const imgBase64 = `data:${downloadImage.headers['content-type']}';base64,${base64}`;
+                const imageName = `${Date.now()}${extname(image.url)}`;
+                const fileDir = join(imagesDir, imageName);
 
-                return this.dataSource.manager.create<RecipeImage>(RecipeImage, { base64: imgBase64 });
+                return new Promise<RecipeImage>((resolve) => {
+                  mkdirp(imagesDir, () => {
+                    fs.writeFileSync(fileDir, downloadImage.data);
+
+                    const newImage = this.dataSource.manager.create<RecipeImage>(RecipeImage, {
+                      name: imageName,
+                    });
+
+                    resolve(newImage);
+                  });
+                });
               }
 
               return null;
