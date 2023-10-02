@@ -1,12 +1,13 @@
+import * as fs from 'fs';
+import * as mkdirp from 'mkdirp';
+import { join, dirname, extname } from 'path';
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { CreateRecipeImageDto } from './image.dto';
 import { RecipeImage } from './image.entity';
 import { HttpService } from '@nestjs/axios';
 import { catchError, map, of } from 'rxjs';
-import * as fs from 'fs';
-import * as mkdirp from 'mkdirp';
-import { join, dirname, extname } from 'path';
+import { generateRandomString } from '../../../shared/utils/random-string.util';
 
 const appDir = dirname(require.main.filename);
 const imagesDir = join(appDir, '..', 'public', 'images');
@@ -35,20 +36,7 @@ export class RecipeImageService {
             catchError(() => of(null)),
             map(async (downloadImage) => {
               if (downloadImage) {
-                const imageName = `${Date.now()}${extname(image.url)}`;
-                const fileDir = join(imagesDir, imageName);
-
-                return new Promise<RecipeImage>((resolve) => {
-                  mkdirp(imagesDir, () => {
-                    fs.writeFileSync(fileDir, downloadImage.data);
-
-                    const newImage = this.dataSource.manager.create<RecipeImage>(RecipeImage, {
-                      name: imageName,
-                    });
-
-                    resolve(newImage);
-                  });
-                });
+                return this.saveImage(downloadImage.data, image.url);
               }
 
               return null;
@@ -61,5 +49,22 @@ export class RecipeImageService {
     const newImagesToSave = newImages.filter((img) => img);
 
     return await this.dataSource.manager.save(newImagesToSave);
+  }
+
+  private async saveImage(downloadedImage: string, imageUrl: string): Promise<RecipeImage> {
+    const imageName = `${Date.now()}-${generateRandomString()}${extname(imageUrl)}`;
+    const fileDir = join(imagesDir, imageName);
+
+    return new Promise<RecipeImage>((resolve) => {
+      mkdirp(imagesDir, () => {
+        fs.writeFile(fileDir, downloadedImage, () => {});
+
+        const newImage = this.dataSource.manager.create<RecipeImage>(RecipeImage, {
+          name: imageName,
+        });
+
+        resolve(newImage);
+      });
+    });
   }
 }
