@@ -1,9 +1,16 @@
+import * as fs from 'fs';
+import * as mkdirp from 'mkdirp';
+import { join, dirname, extname } from 'path';
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { CreateRecipeImageDto } from './image.dto';
 import { RecipeImage } from './image.entity';
 import { HttpService } from '@nestjs/axios';
 import { catchError, map, of } from 'rxjs';
+import { generateRandomString } from '../../../shared/utils/random-string.util';
+
+const appDir = dirname(require.main.filename);
+const imagesDir = join(appDir, '..', 'public', 'images');
 
 @Injectable()
 export class RecipeImageService {
@@ -27,12 +34,9 @@ export class RecipeImageService {
           })
           .pipe(
             catchError(() => of(null)),
-            map((downloadImage) => {
+            map(async (downloadImage) => {
               if (downloadImage) {
-                const base64 = Buffer.from(downloadImage.data).toString('base64');
-                const imgBase64 = `data:${downloadImage.headers['content-type']}';base64,${base64}`;
-
-                return this.dataSource.manager.create<RecipeImage>(RecipeImage, { base64: imgBase64 });
+                return this.saveImage(downloadImage.data, image.url);
               }
 
               return null;
@@ -45,5 +49,22 @@ export class RecipeImageService {
     const newImagesToSave = newImages.filter((img) => img);
 
     return await this.dataSource.manager.save(newImagesToSave);
+  }
+
+  private async saveImage(downloadedImage: string, imageUrl: string): Promise<RecipeImage> {
+    const imageName = `${Date.now()}-${generateRandomString()}${extname(imageUrl)}`;
+    const fileDir = join(imagesDir, imageName);
+
+    return new Promise<RecipeImage>((resolve) => {
+      mkdirp(imagesDir, () => {
+        fs.writeFile(fileDir, downloadedImage, () => {});
+
+        const newImage = this.dataSource.manager.create<RecipeImage>(RecipeImage, {
+          name: imageName,
+        });
+
+        resolve(newImage);
+      });
+    });
   }
 }
