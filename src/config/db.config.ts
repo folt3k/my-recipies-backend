@@ -2,10 +2,11 @@ import { config as envConfig } from 'dotenv';
 import { registerAs } from '@nestjs/config';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { join } from 'path';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 envConfig();
 
-const config = {
+const config: TypeOrmModuleOptions = {
   type: 'postgres',
   host: process.env.DB_HOST,
   port: +process.env.DB_PORT,

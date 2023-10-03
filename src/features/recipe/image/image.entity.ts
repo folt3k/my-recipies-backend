@@ -7,7 +7,7 @@ export class RecipeImage {
   id: string;
 
   @Column('text')
-  base64: string;
+  name: string;
 
   @ManyToOne(() => Recipe, (recipe) => recipe.images, { nullable: true })
   recipe?: Recipe;
