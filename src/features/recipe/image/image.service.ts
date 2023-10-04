@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as mimeTypes from 'mime-types';
 import { join, dirname, extname } from 'path';
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
@@ -35,7 +36,9 @@ export class RecipeImageService {
             catchError(() => of(null)),
             map(async (downloadImage) => {
               if (downloadImage) {
-                return this.saveImage(downloadImage.data, image.url);
+                const imageExt = mimeTypes.extension(downloadImage.headers['content-type']);
+
+                return this.saveImage(downloadImage.data, imageExt as string);
               }
 
               return null;
@@ -50,8 +53,8 @@ export class RecipeImageService {
     return await this.dataSource.manager.save(newImagesToSave);
   }
 
-  private async saveImage(downloadedImage: string, imageUrl: string): Promise<RecipeImage> {
-    const imageName = `${Date.now()}-${generateRandomString()}${extname(imageUrl)}`;
+  private async saveImage(downloadedImage: string, imageExt: string): Promise<RecipeImage> {
+    const imageName = `${Date.now()}-${generateRandomString()}.${imageExt}`;
     const fileDir = join(imagesDir, imageName);
 
     return new Promise<RecipeImage>((resolve) => {
