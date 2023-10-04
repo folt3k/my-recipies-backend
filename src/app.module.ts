@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import * as fs from 'fs';
 import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -12,7 +13,12 @@ import dbConfig from './config/db.config';
 import { dirname, join } from 'path';
 
 const appDir = dirname(require.main.filename);
-const publicDir = join(appDir, '..', 'public');
+const imagesDir = join(appDir, '..', 'public', 'images');
+
+if (!fs.existsSync(imagesDir)) {
+  fs.mkdirSync(imagesDir, { recursive: true });
+}
+
 
 @Module({
   imports: [
@@ -25,7 +31,7 @@ const publicDir = join(appDir, '..', 'public');
       useFactory: async (configService: ConfigService) => configService.get('dbConfig'),
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(publicDir),
+      rootPath: join(appDir, '..', 'public'),
     }),
     UsersModule,
     AuthModule,

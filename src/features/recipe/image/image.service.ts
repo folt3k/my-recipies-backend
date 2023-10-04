@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-import * as mkdirp from 'mkdirp';
 import { join, dirname, extname } from 'path';
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
@@ -56,15 +55,13 @@ export class RecipeImageService {
     const fileDir = join(imagesDir, imageName);
 
     return new Promise<RecipeImage>((resolve) => {
-      mkdirp(imagesDir, () => {
-        fs.writeFile(fileDir, downloadedImage, () => {});
+      fs.writeFile(fileDir, downloadedImage, () => {});
 
-        const newImage = this.dataSource.manager.create<RecipeImage>(RecipeImage, {
-          name: imageName,
-        });
-
-        resolve(newImage);
+      const newImage = this.dataSource.manager.create<RecipeImage>(RecipeImage, {
+        name: imageName,
       });
+
+      resolve(newImage);
     });
   }
 }
