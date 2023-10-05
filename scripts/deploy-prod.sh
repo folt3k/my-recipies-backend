@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ssh -i $1 ubuntu@16.16.209.100 << 'ENDSSH'
+ssh -i $1 ubuntu@13.53.96.88 << 'ENDSSH'
 
 cd /var/www/my-recipes/backend
 git stash
