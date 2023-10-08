@@ -57,6 +57,7 @@ export class RecipeService {
         description: dto.description,
         content: dto.content,
         ingredients: dto.ingredients,
+        hasIngredientCategories: hasIngredientCategories(dto.ingredients),
         tags: savedTags,
       });
 
