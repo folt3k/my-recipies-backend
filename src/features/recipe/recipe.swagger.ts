@@ -7,11 +7,13 @@ export const upsertRecipeExampleData: SwaggerExampleData<UpsertRecipeDto> = {
       name: 'Pyszna beza',
       description: 'Wspaniała wuzetka prosto z Warszawy',
       content: 'To jest przykładowy przepis na wuzetkę.',
-      images: [
-        {
-          url: 'http://localhost:3000/adres_do_obrazka.png',
-        },
-      ],
+      images: {
+        new: [
+          {
+            url: 'http://localhost:3000/adres_do_obrazka.png',
+          },
+        ],
+      },
       ingredients: [
         {
           name: 'Biszkopt',
@@ -51,11 +53,13 @@ export const upsertRecipeExampleData: SwaggerExampleData<UpsertRecipeDto> = {
       name: 'Pyszna beza',
       description: 'Wspaniała wuzetka prosto z Warszawy',
       content: 'To jest przykładowy przepis na wuzetkę.',
-      images: [
-        {
-          url: 'http://localhost:3000/adres_do_obrazka.png',
-        },
-      ],
+      images: {
+        new: [
+          {
+            url: 'http://localhost:3000/adres_do_obrazka.png',
+          },
+        ],
+      },
       ingredients: [
         {
           name: '50 dag mąki',

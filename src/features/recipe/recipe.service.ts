@@ -22,7 +22,8 @@ export class RecipeService {
   async create(dto: UpsertRecipeDto): Promise<Recipe> {
     return this.dataSource.transaction(async (manager) => {
       const savedTags = await this.tagService.saveAll(dto.tags);
-      const savedImages = await this.imageService.saveAll(dto.images);
+
+      const savedImages = await this.imageService.saveNewImages(dto.images.new);
 
       const newRecipe = manager.create(Recipe, {
         name: dto.name,
@@ -49,19 +50,19 @@ export class RecipeService {
       }
 
       const savedTags = await this.tagService.saveAll(dto.tags);
-      const savedImages = await this.imageService.saveAll(dto.images, id);
 
-      const prelaodedRecipe = await manager.preload(Recipe, {
+      const preloadedRecipe = await manager.preload(Recipe, {
         id: id,
         name: dto.name,
         description: dto.description,
         content: dto.content,
         ingredients: dto.ingredients,
-        images: savedImages,
         tags: savedTags,
       });
 
-      const updatedRecipe = await manager.save(prelaodedRecipe);
+      const updatedRecipe = await manager.save(preloadedRecipe);
+
+      await this.imageService.updateImages(dto.images, id);
 
       return await manager.findOne(Recipe, { where: { id: updatedRecipe.id } });
     });

@@ -1,5 +1,6 @@
 import { RecipeIngredientsGroup, RecipeIngredient } from './ingredient/ingredient.types';
 import { ApiProperty } from '@nestjs/swagger';
+import { RecipeImage } from './image/image.entity';
 
 export class UpsertRecipeDto {
   @ApiProperty()
@@ -12,11 +13,16 @@ export class UpsertRecipeDto {
   content: string;
 
   @ApiProperty()
-  images: Array<{ url: string }>;
+  images: UpsertImagesDto;
 
   @ApiProperty()
   ingredients: RecipeIngredientsGroup[] | RecipeIngredient[];
 
   @ApiProperty()
   tags: Array<{ name: string }>;
+}
+
+export interface UpsertImagesDto {
+  new: Array<{ url: string }>;
+  uploaded?: Array<RecipeImage>;
 }
