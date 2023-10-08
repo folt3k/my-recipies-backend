@@ -29,8 +29,11 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=my-recipes
       - AUTH_JWT_SECRET_KEY=${AUTH_JWT_SECRET_KEY}
+    volumes:
+      - images:/home/app/public/images
     depends_on:
       postgres:
         condition: service_healthy
 volumes:
   pgdata:
+  images:
