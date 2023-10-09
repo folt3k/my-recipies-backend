@@ -3,9 +3,13 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import 'dotenv/config';
 import * as process from 'process';
+import loggerConfig from './config/logger.config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule, {
+    cors: true,
+    logger: loggerConfig,
+  });
 
   if (process.env.NODE_ENV === 'development') {
     const config = new DocumentBuilder()
