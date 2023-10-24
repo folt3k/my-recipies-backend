@@ -12,6 +12,6 @@ export class RecipeImage {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => Recipe, (recipe) => recipe.images, { nullable: true })
+  @ManyToOne(() => Recipe, (recipe) => recipe.images, { nullable: true, onDelete: 'CASCADE' })
   recipe?: Recipe;
 }

@@ -59,6 +59,14 @@ export class RecipeImageService {
     return await this.dataSource.manager.save(newImagesToSave);
   }
 
+  async deleteImages(recipeId: string): Promise<void> {
+    const images = await this.dataSource.manager.find(RecipeImage, {
+      where: { recipe: { id: recipeId } },
+    });
+
+    await Promise.all(images.map((image) => this.deleteImage(image)));
+  }
+
   private async saveImage(
     downloadedImage: string,
     imageExt: string,

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { UpsertRecipeDto } from './recipe.dto';
 import { RecipeService } from './recipe.service';
 import { ApiBearerAuth, ApiTags, ApiBody, ApiQuery, ApiParam } from '@nestjs/swagger';
@@ -33,6 +33,12 @@ export class RecipeController {
   @ApiParam({ name: 'id', type: 'string', required: true })
   async getOne(@Param() params: { id: string }) {
     return this.recipeService.getOne(params.id);
+  }
+
+  @Delete(':id')
+  @ApiParam({ name: 'id', type: 'string', required: true })
+  async delete(@Param() params: { id: string }) {
+    return this.recipeService.delete(params.id);
   }
 
   @Get()

@@ -69,6 +69,17 @@ export class RecipeService {
     });
   }
 
+  async delete(id: string): Promise<void> {
+    try {
+      await this.recipeRepository.findOneOrFail({ where: { id } });
+    } catch (e) {
+      throw new HttpException('Taki przepis nie istnieje.', 404);
+    }
+
+    await this.imageService.deleteImages(id);
+    await this.recipeRepository.delete({ id });
+  }
+
   async getAll(
     params: GetAllRecipesQueryParams = {},
   ): Promise<{ page: number; perPage: number; total: number; items: Recipe[] }> {
