@@ -94,6 +94,7 @@ export class RecipeService {
     if (params.q) {
       query.where('recipe.name ILIKE (:q)', { q: `%${params.q}%` });
       query.orWhere('recipe.content ILIKE (:q)', { q: `%${params.q}%` });
+      query.orWhere('recipe.description ILIKE (:q)', { q: `%${params.q}%` });
     }
 
     if (params.tags) {
